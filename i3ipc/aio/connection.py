@@ -302,12 +302,13 @@ class Connection:
 
     def _recv(self, size):
       buf = bytearray(size)
-      off = 0
+      mem = memoryview(buf)
       sock = self._sub_socket
-      while off < size:
-        if not (rsize := sock.recv_into(memoryview(buf)[off:])):
+      while len(buf):
+        if not (rsize := sock.recv_into(mem)):
           return b''
-        off += rsize
+        mem = mem[rsize:]
+      mem.release()
       return buf
 
     def _read_message(self):
