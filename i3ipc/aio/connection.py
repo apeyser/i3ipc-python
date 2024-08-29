@@ -304,7 +304,7 @@ class Connection:
       buf = bytearray(size)
       mem = memoryview(buf)
       sock = self._sub_socket
-      while len(buf):
+      while len(mem):
         if not (rsize := sock.recv_into(mem)):
           return b''
         mem = mem[rsize:]
